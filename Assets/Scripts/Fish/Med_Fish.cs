@@ -6,6 +6,7 @@ public class Med_Fish : MonoBehaviour
     [SerializeField] private Med_Path currentPath;
 
     private Vector3 _targetPosition;
+    private int _currentWaypoint;
 
     // Find target for fish before OnEnable
     private void Awake()
@@ -24,5 +25,20 @@ public class Med_Fish : MonoBehaviour
     {
         // Move towards target position
         transform.position = Vector3.MoveTowards(transform.position, _targetPosition, moveSpeed * Time.deltaTime);
+
+        // Set new target position when waypoint reached
+        float relativeDistance = (transform.position - _targetPosition).magnitude;
+        if (relativeDistance < 0.1f)
+        {
+            if (_currentWaypoint < currentPath.Med_Waypoints.Length -1)
+            {
+            _currentWaypoint++;     // Increase waypoint int by 1
+            _targetPosition = currentPath.GetPosition(_currentWaypoint);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
+        }
     }
 }
