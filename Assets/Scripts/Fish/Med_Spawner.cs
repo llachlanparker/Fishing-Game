@@ -1,10 +1,12 @@
+using System;
 using UnityEngine;
 
-public class Small_Spawner : MonoBehaviour
+public class Med_Spawner : MonoBehaviour
 {
     private float _spawnTimer;
     private float _spawnInterval = 1f;
-    public GameObject Prefab;
+
+    [SerializeField] public ObjectPooler pool;
 
     // Update is called once per frame
     void Update()
@@ -13,14 +15,15 @@ public class Small_Spawner : MonoBehaviour
         if (_spawnTimer <= 0)
         {
             _spawnTimer = _spawnInterval;
-            SpawnEnemy();
+            SpawnFish();
         }
     }
 
-    // Spawn enemy after _spawnInterval
-    private void SpawnEnemy()
+    // Spawn fish after activating from ObjectPool
+    private void SpawnFish()
     {
-        GameObject spawnedObject = GameObject.Instantiate(Prefab);
+        GameObject spawnedObject = pool.GetPooledObject();
         spawnedObject.transform.position = transform.position;
+        spawnedObject.SetActive(true);
     }
 }
